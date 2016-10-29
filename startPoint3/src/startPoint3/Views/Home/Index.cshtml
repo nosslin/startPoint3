@@ -667,7 +667,9 @@ ViewData["Title"] = "Home Page";
             if ((typeof this.naturalWidth != "undefined" &&
                 this.naturalWidth == 0)
                 || this.readyState == 'uninitialized') {
-                $(this).attr('src', 'https://www.netonnet.se/Assets/images/ios_57x57.png');
+                //$(this).attr('src', 'https://www.netonnet.se/Assets/images/ios_57x57.png');
+                $(this).attr('src', '');
+                $(this).attr('class', 'fa fa-html5 fa-4');
             }
         });
     })
