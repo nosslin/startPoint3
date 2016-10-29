@@ -1,6 +1,8 @@
 ﻿@{
 ViewData["Title"] = "Home Page";
 }
+
+
 <style type="text/css">
 
    ul
@@ -653,5 +655,26 @@ ViewData["Title"] = "Home Page";
     </ul>
 
 </div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+
+<script type="text/javascript">
+
+    $(window).bind('load', function () {
+        $('img').each(function () {
+            if ((typeof this.naturalWidth != "undefined" &&
+                this.naturalWidth == 0)
+                || this.readyState == 'uninitialized') {
+                $(this).attr('src', 'https://www.netonnet.se/Assets/images/ios_57x57.png');
+            }
+        });
+    })
+
+</script>
+
+}
+
 
 
