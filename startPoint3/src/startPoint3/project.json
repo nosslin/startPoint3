@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-startPoint3-752255da-f749-4ac4-a34f-99cca4cb55bc",
 
   "dependencies": {
@@ -43,7 +43,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "HtmlAgilityPack.NetCore": "1.5.0.1"
   },
 
   "tools": {
