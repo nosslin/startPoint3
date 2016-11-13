@@ -7,6 +7,7 @@ using startPoint3.Models.ImportBookmarks;
 using HtmlAgilityPack;
 using System.IO;
 using System.Text.RegularExpressions;
+using NuGet.Protocol.Core.v3;
 
 namespace startPoint3.Controllers
 {
@@ -33,10 +34,42 @@ namespace startPoint3.Controllers
                 var streamToImprove = importBookmarks.NetscapeBookmarkFile.OpenReadStream();
                 MemoryStream improvedStream = ImproveDocumentStructure(streamToImprove);
 
-                Dictionary<string, List<string>> bookmarks = ReadBookmarksIntoDictonary(improvedStream);
+                Dictionary<string, List<link>> bookmarks = ReadBookmarksIntoDictonary(improvedStream);
 
 
                 //TODO: Convert dictonary to object structure of sections and bookmarks
+
+
+                /*
+                 * 
+                 * "sections": [{
+                        "name": "A is a nice section name",
+                        "links": [{
+                          "name": "A1 link",
+                          "linkUrl": "http://www.itsajten.se/",
+                          "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
+                        }, {
+                          "name": "A2 link",
+                          "linkUrl": "http://www.itsajten.se/",
+                          "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
+                        }]
+                      }, {
+                 * 
+                 */
+
+
+
+                var sections = new List<section>();
+
+
+                foreach (var sectionGroup in bookmarks.GroupBy(kp => kp.Key))
+                {
+                  sections.Add(new section(sectionGroup.Key, sectionGroup.First().Value));
+                }
+
+
+                string linkJson = sections.ToJson();
+
 
 
             }
@@ -46,13 +79,42 @@ namespace startPoint3.Controllers
             return View();
         }
 
-        private Dictionary<string, List<string>> ReadBookmarksIntoDictonary(MemoryStream improvedStream)
+
+        public class section
+        {
+            public section(string name, List<link> links)
+            {
+                this.name = name;
+                this.links = links;
+            }
+
+            public string name { get;}
+            public List<link> links { get; }
+
+        }
+
+        public class link
+        {
+            public link(string name, string linkUrl, string imgUrl)
+            {
+                this.name = name;
+                this.linkUrl = linkUrl;
+                this.imgUrl = imgUrl;
+            }
+
+            public string name { get; }
+            public string linkUrl { get; }
+            public string imgUrl { get; }
+        }
+
+
+        private Dictionary<string, List<link>> ReadBookmarksIntoDictonary(MemoryStream improvedStream)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(improvedStream);
 
 
-            var sections = new Dictionary<string, List<string>>();
+            var sections = new Dictionary<string, List<link>>();
 
             var nodes = doc.DocumentNode.SelectNodes("//a");
             foreach (HtmlNode item in nodes)
@@ -63,7 +125,7 @@ namespace startPoint3.Controllers
             return sections;
         }
 
-        private void ProcessBookmark(Dictionary<string, List<string>> bookmarks, HtmlNode item)
+        private void ProcessBookmark(Dictionary<string, List<link>> bookmarks, HtmlNode item)
         {
             bool keepLocking = true;
             var currentNode = item;
@@ -90,10 +152,10 @@ namespace startPoint3.Controllers
 
             if (!bookmarks.ContainsKey(sectionName))
             {
-                bookmarks.Add(sectionName, new List<string>());
+                bookmarks.Add(sectionName, new List<link>());
             }
 
-            bookmarks[sectionName].Add(item.InnerText);
+            bookmarks[sectionName].Add(new link(item.InnerText, item.GetAttributeValue("href", ""),""));
         }
 
         private static MemoryStream ImproveDocumentStructure(Stream streamToImprove)

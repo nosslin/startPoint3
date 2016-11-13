@@ -1,0 +1,27 @@
+﻿ul {
+  list-style-type: none;
+  text-align: center;
+  padding: 10px;
+  margin: 0px;
+}
+
+li {}
+
+.bookMarkLi {
+   width: 120px;
+  display: inline-block;
+  vertical-align: top;
+ }
+
+.bookmarkLink {
+  align-content: center;
+  overflow: hidden;
+}
+
+h3 {
+  border-bottom: 1px dashed #d3d3d3;
+}
+.row ul {
+  height:100px;
+}
+
