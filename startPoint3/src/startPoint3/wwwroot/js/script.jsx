@@ -101,3 +101,5 @@ function getLinkData()
     }
   
 }
+
+ReactDOM.render(<Links /> , document.getElementById("root"));

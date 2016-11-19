@@ -44,7 +44,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "HtmlAgilityPack.NetCore": "1.5.0.1"
+    "HtmlAgilityPack.NetCore": "1.5.0.1",
+    "React.AspNet": "3.0.0"
   },
 
   "tools": {
