@@ -8,6 +8,9 @@ using HtmlAgilityPack;
 using System.IO;
 using System.Text.RegularExpressions;
 using NuGet.Protocol.Core.v3;
+using MongoDB.Driver;
+using startPoint3.Models.Bookmarks;
+using startPoint3.Repository;
 
 namespace startPoint3.Controllers
 {
@@ -29,48 +32,29 @@ namespace startPoint3.Controllers
             if (ModelState.IsValid)
             {
 
-                var name = importBookmarks.Bucket;
+                var buckeName = importBookmarks.Bucket;
 
                 var streamToImprove = importBookmarks.NetscapeBookmarkFile.OpenReadStream();
                 MemoryStream improvedStream = ImproveDocumentStructure(streamToImprove);
 
-                Dictionary<string, List<link>> bookmarks = ReadBookmarksIntoDictonary(improvedStream);
+                Dictionary<string, List<Link>> bookmarksDictonary = ReadBookmarksIntoDictonary(improvedStream);
+                                            
+                var sections = new List<Section>();
 
 
-                //TODO: Convert dictonary to object structure of sections and bookmarks
-
-
-                /*
-                 * 
-                 * "sections": [{
-                        "name": "A is a nice section name",
-                        "links": [{
-                          "name": "A1 link",
-                          "linkUrl": "http://www.itsajten.se/",
-                          "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-                        }, {
-                          "name": "A2 link",
-                          "linkUrl": "http://www.itsajten.se/",
-                          "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-                        }]
-                      }, {
-                 * 
-                 */
-
-
-
-                var sections = new List<section>();
-
-
-                foreach (var sectionGroup in bookmarks.GroupBy(kp => kp.Key))
+                foreach (var sectionGroup in bookmarksDictonary.GroupBy(kp => kp.Key))
                 {
-                  sections.Add(new section(sectionGroup.Key, sectionGroup.First().Value));
+                  sections.Add(new Section(sectionGroup.Key, sectionGroup.First().Value));
                 }
 
+                var bookmarks = new Bookmarks(buckeName,sections);
+                              
 
-                string linkJson = sections.ToJson();
+                var repo = new BookmarkRepository("peter");
 
+                repo.AddBookmarks(bookmarks);
 
+                //string linkJson = sections.ToJson();
 
             }
 
@@ -80,41 +64,16 @@ namespace startPoint3.Controllers
         }
 
 
-        public class section
-        {
-            public section(string name, List<link> links)
-            {
-                this.name = name;
-                this.links = links;
-            }
-
-            public string name { get;}
-            public List<link> links { get; }
-
-        }
-
-        public class link
-        {
-            public link(string name, string linkUrl, string imgUrl)
-            {
-                this.name = name;
-                this.linkUrl = linkUrl;
-                this.imgUrl = imgUrl;
-            }
-
-            public string name { get; }
-            public string linkUrl { get; }
-            public string imgUrl { get; }
-        }
+       
 
 
-        private Dictionary<string, List<link>> ReadBookmarksIntoDictonary(MemoryStream improvedStream)
+        private Dictionary<string, List<Link>> ReadBookmarksIntoDictonary(MemoryStream improvedStream)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(improvedStream);
 
 
-            var sections = new Dictionary<string, List<link>>();
+            var sections = new Dictionary<string, List<Link>>();
 
             var nodes = doc.DocumentNode.SelectNodes("//a");
             foreach (HtmlNode item in nodes)
@@ -125,7 +84,7 @@ namespace startPoint3.Controllers
             return sections;
         }
 
-        private void ProcessBookmark(Dictionary<string, List<link>> bookmarks, HtmlNode item)
+        private void ProcessBookmark(Dictionary<string, List<Link>> bookmarks, HtmlNode item)
         {
             bool keepLocking = true;
             var currentNode = item;
@@ -152,10 +111,10 @@ namespace startPoint3.Controllers
 
             if (!bookmarks.ContainsKey(sectionName))
             {
-                bookmarks.Add(sectionName, new List<link>());
+                bookmarks.Add(sectionName, new List<Link>());
             }
 
-            bookmarks[sectionName].Add(new link(item.InnerText, item.GetAttributeValue("href", ""),""));
+            bookmarks[sectionName].Add(new Link(item.InnerText, item.GetAttributeValue("href", ""),""));
         }
 
         private static MemoryStream ImproveDocumentStructure(Stream streamToImprove)

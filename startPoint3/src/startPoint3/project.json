@@ -45,7 +45,8 @@
       "type": "build"
     },
     "HtmlAgilityPack.NetCore": "1.5.0.1",
-    "React.AspNet": "3.0.0"
+    "React.AspNet": "3.0.0",
+    "MongoDB.Driver": "2.3.0"
   },
 
   "tools": {

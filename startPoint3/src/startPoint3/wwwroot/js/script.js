@@ -107,53 +107,5 @@ var Links = (function (_React$Component3) {
     return Links;
 })(React.Component);
 
-function getLinkData() {
-
-    return {
-        "sections": [{
-            "name": "A is a nice section name",
-            "links": [{
-                "name": "A1 link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }, {
-                "name": "A2 link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }]
-        }, {
-            "name": "B is also good",
-            "links": [{
-                "name": "B link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }, {
-                "name": "A link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }, {
-                "name": "Number 3 link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }]
-        }, {
-            "name": "Added another B section",
-            "links": [{
-                "name": "B link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }, {
-                "name": "A link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }, {
-                "name": "Number 3 link",
-                "linkUrl": "http://www.itsajten.se/",
-                "imgurl": "http://www.itsajten.se/tpl/default/img/favicon-144px.png"
-            }]
-        }]
-    };
-}
-
 ReactDOM.render(React.createElement(Links, null), document.getElementById("root"));
 

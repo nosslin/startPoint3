@@ -1,4 +1,4 @@
-@model startPoint3.Models.ImportBookmarks.ImportBookmarks
+@model startPoint3.Models.Bookmarks.Bookmarks
 
 @{
     ViewData["Title"] = "ImportNetscapeBookmarkFile";
@@ -6,12 +6,22 @@
 }
 
 <link rel="stylesheet" href="style.css" />
+<h1>@Model.Bucket</h1>
 <div id="root"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.js"></script>
-<script src="@Url.Content("~/js/script.jsx")"></script>
+
+<script type="text/javascript">
+
+    function getLinkData()
+    {
+        return @Html.Raw(Json.Serialize(Model));
+    }
+
+</script>
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.js"></script>
+    <script src="@Url.Content("~/js/script.jsx")"></script>
 }
