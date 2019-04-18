@@ -26,7 +26,7 @@ var Link = (function (_React$Component) {
                 React.createElement(
                     "a",
                     { className: "bookmarkLink", href: this.props.link.link },
-                    React.createElement("img", { src: this.props.link.imgurl, width: "75", height: "75" }),
+                    React.createElement("img", { src: this.props.link.imgUrl, width: "75", height: "75" }),
                     React.createElement(
                         "div",
                         null,

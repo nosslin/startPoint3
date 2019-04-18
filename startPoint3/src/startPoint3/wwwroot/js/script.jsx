@@ -2,7 +2,7 @@
     render() {
         return (<li className="bookMarkLi">
                   <a className="bookmarkLink" href={this.props.link.link}>
-                    <img src={this.props.link.imgurl} width='75' height='75' />
+                    <img src={this.props.link.imgUrl} width='75' height='75' />
                     <div>{this.props.link.name}</div>
                   </a>
                 </li>

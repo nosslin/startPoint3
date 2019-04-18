@@ -25,6 +25,11 @@ namespace startPoint3.Repository
         {
             return _db.GetCollection<Bookmarks>("Bookmarks").Find("{\"Bucket\":\"AAA\"}").FirstOrDefault();
         }
+
+        public void UpdateBookmarks(Bookmarks bookmarks)
+        {
+            _db.GetCollection<Bookmarks>("Bookmarks").ReplaceOne("{\"Bucket\":\"AAA\"}", bookmarks, new UpdateOptions() { IsUpsert = true });
+        }
     }
 }
 

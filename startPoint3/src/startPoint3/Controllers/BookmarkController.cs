@@ -26,8 +26,46 @@ namespace startPoint3.Controllers
         public void ReScanBookmarkThumbnails()
         {
 
+            var repo = new BookmarkRepository("peter");
+            var bookmarks = repo.GetBookmarks("AAA");
+
             var thumbNailService = new ThumbnailExtractor();
-            var thumbnailLink = thumbNailService.GetSiteIconUrl("http://www.aftonbladet.se/");
+
+            int count = 0;
+
+            foreach (var section in bookmarks.Sections)
+            {
+
+                foreach (var link in section.links)
+                {
+                    try
+                    {
+
+                        if (String.IsNullOrEmpty(link.imgUrl) && count<200)
+                        {
+                            count++;
+
+                            var thumbnailLink = thumbNailService.GetSiteIconUrl(link.linkUrl);
+                            if (!String.IsNullOrEmpty(thumbnailLink))
+                            {
+                                if (!thumbnailLink.StartsWith("http"))
+                                {
+                                    var linkUrl = new Uri(link.linkUrl);
+                                    thumbnailLink = linkUrl.OriginalString.Replace(linkUrl.AbsolutePath, "") + thumbnailLink;
+
+                                }
+
+                                link.imgUrl = thumbnailLink;
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+
+            repo.UpdateBookmarks(bookmarks);
+            
             
         }
 
